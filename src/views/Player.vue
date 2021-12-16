@@ -34,13 +34,13 @@ export default {
     }
   },
   mounted () {
-    // var endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+    var endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     }
 
-    fetch('http://localhost:8080/api/v1/players', requestOptions)
+    fetch(endpoint, requestOptions)
       .then(response => response.json())
       .then(result => result.forEach(player => {
         this.players.push(player)

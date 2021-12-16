@@ -34,8 +34,8 @@ export default {
     }
   },
   mounted () {
-    var endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
-    var requestOptions = {
+    const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+    const requestOptions = {
       method: 'GET',
       redirect: 'follow'
     }

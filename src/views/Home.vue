@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" src="../assets/logo1.png">
     <HelloWorld msg="Uniliga Teams"/>
   </div>
 </template>

@@ -1,60 +1,96 @@
 <template>
-  <button class="btn btn-success sticky-button" data-bs-toggle="offcanvas" data-bs-target="#persons-create-offcanvas"
-          aria-controls="#persons-create-offcanvas">
-    <i class="bi bi-person-plus-fill"></i>
+  <button class='btn btn-primary sticky-button' data-bs-toggle='offcanvas' data-bs-target='#players-create-offcanvas'
+          aria-controls='#players-create-offcanvas'>
+    <i class='bi bi-person-plus-fill'></i>
   </button>
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="persons-create-offcanvas" aria-labelledby="offcanvas-label">
-    <div class="offcanvas-header">
-      <h5 id="offcanvas-label">New Person</h5>
-      <button type="button" id="close-offcanvas" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-              aria-label="Close"></button>
+  <div class='offcanvas offcanvas-end' tabindex='-1' id='players-create-offcanvas' aria-labelledby='offcanvas-label'>
+    <div class='offcanvas-header'>
+      <h5 id='offcanvas-label'>New Player</h5>
+      <button type='button' id='close-offcanvas' class='btn-close text-reset' data-bs-dismiss='offcanvas'
+              aria-label='Close'></button>
     </div>
-    <div class="offcanvas-body">
-      <form class="text-start needs-validation" id="persons-create-form" novalidate>
-        <div class="mb-3">
-          <label for="first-name" class="form-label">First name</label>
-          <input type="text" class="form-control" id="first-name" v-model="firstName" required>
-          <div class="invalid-feedback">
+    <div class='offcanvas-body'>
+      <form class='text-start needs-validation' id='players-create-form' novalidate>
+        <div class='mb-3'>
+          <label for='player-name' class='form-label'>Player name</label>
+          <input type='text' class='form-control' id='player-name' v-model='playerName' required>
+          <div class='invalid-feedback'>
+            Please provide the player name.
+          </div>
+        </div>
+        <div class='mb-3'>
+          <label for='bnet-id' class='form-label'>Battle.net ID</label>
+          <input type='text' class='form-control' id='bnet-id' v-model='bnetId' required>
+          <div class='invalid-feedback'>
+            Please provide the Battle.net ID.
+          </div>
+        </div>
+        <div class='mb-3'>
+          <label for='discord-tag' class='form-label'>Discord tag</label>
+          <input type='text' class='form-control' id='discord-tag' v-model='discordTag' required>
+          <div class='invalid-feedback'>
+            Please provide the Discord tag.
+          </div>
+        </div>
+        <div class='mb-3'>
+          <label for='first-name' class='form-label'>First name</label>
+          <input type='text' class='form-control' id='first-name' v-model='firstName' required>
+          <div class='invalid-feedback'>
             Please provide the first name.
           </div>
         </div>
-        <div class="mb-3">
-          <label for="last-name" class="form-label">Last name</label>
-          <input type="text" class="form-control" id="last-name" v-model="lastName" required>
-          <div class="invalid-feedback">
+        <div class='mb-3'>
+          <label for='last-name' class='form-label'>Last name</label>
+          <input type='text' class='form-control' id='last-name' v-model='lastName' required>
+          <div class='invalid-feedback'>
             Please provide the last name.
           </div>
         </div>
-        <div class="mb-3">
-          <label for="gender" class="form-label">Gender</label>
-          <select id="gender" class="form-select" v-model="gender" required>
-            <option value="" selected disabled>Choose...</option>
-            <option value="MALE">Male</option>
-            <option value="FEMALE">Female</option>
-            <option value="DIVERSE">Diverse</option>
+        <div class='mb-3'>
+          <label for='gender' class='form-label'>Gender</label>
+          <select id='gender' class='form-select' v-model='gender' required>
+            <option value='' selected disabled>Choose...</option>
+            <option value='m'>Male</option>
+            <option value='f'>Female</option>
+            <option value='d'>Diverse</option>
           </select>
-          <div class="invalid-feedback">
+          <div class='invalid-feedback'>
             Please select a valid gender.
           </div>
         </div>
-        <div class="mb-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="vaccinated" v-model="vaccinated">
-            <label class="form-check-label" for="vaccinated">
-              Vaccinated
+        <div class='mb-3'>
+          <label for='birthday' class='form-label'>Birthday</label>
+          <input type='text' class='form-control' id='birthday' v-model='birthday' required>
+          <div class='invalid-feedback'>
+            Please provide the birthday.
+          </div>
+        </div>
+        <div class='mb-3'>
+          <div class='form-check'>
+            <input class='form-check-input' type='checkbox' id='isStudent' v-model='isStudent'>
+            <label class='form-check-label' for='isStudent'>
+              Student?
             </label>
           </div>
         </div>
-        <div v-if="this.serverValidationMessages">
+        <div class='mb-3'>
+          <div class='form-check'>
+            <input class='form-check-input' type='checkbox' id='isCompetitive' v-model='isCompetitive'>
+            <label class='form-check-label' for='isCompetitive'>
+              Competitive?
+            </label>
+          </div>
+        </div>
+        <div v-if='this.serverValidationMessages'>
           <ul>
-            <li v-for="(message, index) in serverValidationMessages" :key="index" style="color: red">
+            <li v-for='(message, index) in serverValidationMessages' :key='index' style='color: red'>
               {{ message }}
             </li>
           </ul>
         </div>
-        <div class="mt-5">
-          <button class="btn btn-primary me-3" type="submit" @click.prevent="createPerson">Create</button>
-          <button class="btn btn-danger" type="reset">Reset</button>
+        <div class='mt-5'>
+          <button class='btn btn-primary me-3' type='submit' @click='createPlayer'>Create</button>
+          <button class='btn btn-danger' type='reset'>Reset</button>
         </div>
       </form>
     </div>
@@ -63,33 +99,52 @@
 
 <script>
 export default {
-  name: 'PersonsCreateForm',
+  name: 'PlayerCreateForm',
   data () {
     return {
+      playerName: '',
+      bnetId: '',
+      discordTag: '',
       firstName: '',
       lastName: '',
       gender: '',
-      vaccinated: false,
+      isStudent: false,
+      isCompetitive: false,
       serverValidationMessages: []
     }
   },
   emits: ['created'],
   methods: {
-    async createPerson () {
+    createPlayerConsole () {
+      console.log(this.bnetId)
+      console.log(this.discordTag)
+      console.log(this.firstName)
+      console.log(this.lastName)
+      console.log(this.gender)
+      console.log(this.isStudent)
+      console.log(this.isCompetitive)
+    },
+    async createPlayer () {
       if (this.validate()) {
-        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/persons'
-        const headers = new Headers()
-        headers.append('Content-Type', 'application/json')
-        const person = JSON.stringify({
+        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+        const myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+
+        const player = JSON.stringify({
+          playerName: this.playerName,
+          bnetId: this.bnetId,
+          discordTag: this.discordTag,
+          gender: this.gender,
           firstName: this.firstName,
           lastName: this.lastName,
-          vaccinated: this.vaccinated,
-          gender: this.gender
+          birthday: this.birthday,
+          student: this.isStudent,
+          competitive: this.isCompetitive
         })
         const requestOptions = {
           method: 'POST',
-          headers: headers,
-          body: person,
+          headers: myHeaders,
+          body: player,
           redirect: 'follow'
         }
         const response = await fetch(endpoint, requestOptions)
@@ -110,7 +165,7 @@ export default {
       }
     },
     validate () {
-      const form = document.getElementById('persons-create-form')
+      const form = document.getElementById('players-create-form')
       form.classList.add('was-validated')
       return form.checkValidity()
     }

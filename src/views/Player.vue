@@ -31,20 +31,32 @@
       </table>
     </div>
   </div>
-  <persons-create-form @created="addPlayer"></persons-create-form>
+  <player-create-form @created="addPlayer"></player-create-form>
 </template>
 
 <script>
-import PersonsCreateForm from '../components/PlayerCreateForm'
+import PlayerCreateForm from '../components/PlayerCreateForm'
+
 export default {
   name: 'Players',
-  components: { PersonsCreateForm },
+  components: { PlayerCreateForm },
   data () {
     return {
       players: []
     }
   },
   methods: {
+    addPlayer (playerLocation) {
+      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + playerLocation
+      const requestOption = {
+        method: 'GET',
+        redirect: 'follow'
+      }
+      fetch(endpoint, requestOption)
+        .then(response => response.json())
+        .then(player => this.players.push(player))
+        .catch(error => console.log('error', error))
+    }
   },
   mounted () {
     const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'

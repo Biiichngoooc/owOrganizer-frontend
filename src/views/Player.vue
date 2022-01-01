@@ -1,37 +1,50 @@
 <template>
 <h1>Welcome to Player</h1>
   <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-      <div class="col" v-for="player in players" :key="player.id">
-        <div class="card">
-          <img :src="getAvatar(player)" class="card-img-top" :alt="player.firstName + ' ' + player.lastName">
-          <div class="card-body">
-            <h5 class="card-title">{{ player.firstName }} {{ player.lastName }}</h5>
-            <p class="card-text">
-              Hi! Mein Name ist {{ player.firstName }} und ich bin {{ player.student? 'Student/in' : 'kein/e Student/in' }}!</p>
-          </div>
-        </div>
-      </div>
+    <div class="col">
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Player</th>
+          <th scope="col">Bnet</th>
+          <th scope="col">Discord</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Gender</th>
+          <th scope="col">Birthday</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="player in players" :key="player.id">
+          <th scope="row">{{player.id}}</th>
+          <td>{{player.playerName}}</td>
+          <td>{{player.bnetId}}</td>
+          <td>{{ player.discordTag }}</td>
+          <td>{{player.firstName}}</td>
+          <td>{{player.lastName}}</td>
+          <td>{{player.gender}}</td>
+          <td>{{player.birthday}}</td>
+
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+  <persons-create-form @created="addPlayer"></persons-create-form>
 </template>
 
 <script>
+import PersonsCreateForm from '../components/PlayerCreateForm'
 export default {
   name: 'Players',
+  components: { PersonsCreateForm },
   data () {
     return {
       players: []
     }
   },
   methods: {
-    getAvatar (player) {
-      if (player.gender === 'm') {
-        return require('../assets/sojourn.png')
-      } else if (player.gender === 'f') {
-        return require('../assets/sombra.png')
-      }
-    }
   },
   mounted () {
     const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'

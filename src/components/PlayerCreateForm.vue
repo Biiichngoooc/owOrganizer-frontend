@@ -58,12 +58,26 @@
             Please select a valid gender.
           </div>
         </div>
+<!--        <div class='mb-3'>-->
+<!--          <label for='birthday' class='form-label'>Birthday</label>-->
+<!--          <input type='text' class='form-control' id='birthday' v-model='birthday' required>-->
+<!--          <div class='invalid-feedback'>-->
+<!--            Please provide the birthday.-->
+<!--          </div>-->
+<!--        </div>-->
         <div class='mb-3'>
-          <label for='birthday' class='form-label'>Birthday</label>
-          <input type='text' class='form-control' id='birthday' v-model='birthday' required>
-          <div class='invalid-feedback'>
-            Please provide the birthday.
-          </div>
+          <label for='birthday' class='form-label'>Choose a date</label>
+          <b-form-datepicker id='birthday' v-model='birthday'></b-form-datepicker>
+          <p>Value: {{ birthday }}</p>
+        </div>
+        <div>
+          <!-- Styled -->
+          <b-form-file
+            v-model="file1"
+            :state="Boolean(file1)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+          ></b-form-file>
         </div>
         <div class='mb-3'>
           <div class='form-check'>
@@ -108,6 +122,7 @@ export default {
       firstName: '',
       lastName: '',
       gender: '',
+      birthday: '',
       isStudent: false,
       isCompetitive: false,
       serverValidationMessages: []
@@ -121,6 +136,7 @@ export default {
       console.log(this.firstName)
       console.log(this.lastName)
       console.log(this.gender)
+      console.log(this.birthday)
       console.log(this.isStudent)
       console.log(this.isCompetitive)
     },
@@ -168,11 +184,15 @@ export default {
       const form = document.getElementById('players-create-form')
       form.classList.add('was-validated')
       return form.checkValidity()
+    },
+    data () {
+      return {
+        value: ''
+      }
     }
   }
 }
 </script>
-
 <style scoped>
 .sticky-button {
   position: fixed;

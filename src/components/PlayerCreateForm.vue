@@ -58,30 +58,16 @@
             Please select a valid gender.
           </div>
         </div>
-<!--        <div class='mb-3'>-->
-<!--          <label for='birthday' class='form-label'>Birthday</label>-->
-<!--          <input type='text' class='form-control' id='birthday' v-model='birthday' required>-->
-<!--          <div class='invalid-feedback'>-->
-<!--            Please provide the birthday.-->
-<!--          </div>-->
-<!--        </div>-->
         <div class='mb-3'>
-          <label for='birthday' class='form-label'>Choose a date</label>
-          <b-form-datepicker id='birthday' v-model='birthday'></b-form-datepicker>
-          <p>Value: {{ birthday }}</p>
-        </div>
-        <div>
-          <!-- Styled -->
-          <b-form-file
-            v-model="file1"
-            :state="Boolean(file1)"
-            placeholder="Choose a file or drop it here..."
-            drop-placeholder="Drop file here..."
-          ></b-form-file>
+          <label for='birthday' class='form-label'>Birthday</label>
+          <input type='text' class='form-control' id='birthday' v-model='birthday'>
+          <div class='invalid-feedback'>
+            Please provide the birthday.
+          </div>
         </div>
         <div class='mb-3'>
           <div class='form-check'>
-            <input class='form-check-input' type='checkbox' id='isStudent' v-model='isStudent'>
+            <input class='form-check-input' type='checkbox' id='isStudent' v-model='isStudent' >
             <label class='form-check-label' for='isStudent'>
               Student?
             </label>
@@ -103,7 +89,7 @@
           </ul>
         </div>
         <div class='mt-5'>
-          <button class='btn btn-primary me-3' type='submit' @click='createPlayer'>Create</button>
+          <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer'>Create</button>
           <button class='btn btn-danger' type='reset'>Reset</button>
         </div>
       </form>
@@ -128,7 +114,6 @@ export default {
       serverValidationMessages: []
     }
   },
-  emits: ['created'],
   methods: {
     createPlayerConsole () {
       console.log(this.bnetId)
@@ -142,7 +127,7 @@ export default {
     },
     async createPlayer () {
       if (this.validate()) {
-        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+        // const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
 
@@ -163,8 +148,12 @@ export default {
           body: player,
           redirect: 'follow'
         }
-        const response = await fetch(endpoint, requestOptions)
-        await this.handleResponse(response)
+        fetch('http://localhost:8080/api/v1/players', requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error))
+        // const response = await fetch(endpoint, requestOptions)
+        // await this.handleResponse(response)
       }
     },
     async handleResponse (response) {
@@ -181,14 +170,27 @@ export default {
       }
     },
     validate () {
-      const form = document.getElementById('players-create-form')
-      form.classList.add('was-validated')
-      return form.checkValidity()
-    },
-    data () {
-      return {
-        value: ''
-      }
+      // const form = document.getElementById('players-create-form')
+      // form.classList.add('was-validated')
+      // return form.checkValidity()
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      let valid = true
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              event.preventDefault()
+              event.stopPropagation()
+              valid = false
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+      return valid
     }
   }
 }

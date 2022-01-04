@@ -25,7 +25,8 @@
           <td>{{player.lastName}}</td>
           <td>{{player.gender}}</td>
           <td>{{player.birthday}}</td>
-
+          <td><button type="button" class="btn-close" aria-label="Close" @click="deletePlayer"></button>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -69,6 +70,7 @@ export default {
       .then(response => response.json())
       .then(result => result.forEach(player => {
         this.players.push(player)
+        console.log(player)
       }))
       .catch(error => console.log('error', error))
   }
@@ -76,5 +78,7 @@ export default {
 </script>
 
 <style scoped>
-
+.close {
+  color: red;
+}
 </style>

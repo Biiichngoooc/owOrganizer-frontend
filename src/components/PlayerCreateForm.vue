@@ -1,7 +1,9 @@
 <template>
   <button class='btn btn-primary sticky-button' data-bs-toggle='offcanvas' data-bs-target='#players-create-offcanvas'
           aria-controls='#players-create-offcanvas'>
-    <i class='bi bi-person-plus-fill'></i>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16" style="--darkreader-inline-fill: currentColor;" data-darkreader-inline-fill="">
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+    </svg>
   </button>
   <div class='offcanvas offcanvas-end' tabindex='-1' id='players-create-offcanvas' aria-labelledby='offcanvas-label'>
     <div class='offcanvas-header'>
@@ -94,6 +96,15 @@
         </div>
       </form>
     </div>
+    <button
+      class="btn btn-primary"
+      data-bs-target="#collapseTarget"
+      data-bs-toggle="collapse">
+      Bootstrap collapse
+    </button>
+    <div class="collapse py-2" id="collapseTarget">
+      This is the toggle-able content!
+    </div>
   </div>
 </template>
 
@@ -138,7 +149,7 @@ export default {
           gender: this.gender,
           firstName: this.firstName,
           lastName: this.lastName,
-          birthday: this.birthday,
+          birthday: this.birthday.reviver,
           student: this.isStudent,
           competitive: this.isCompetitive
         })

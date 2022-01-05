@@ -91,19 +91,10 @@
           </ul>
         </div>
         <div class='mt-5'>
-          <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer'>Create</button>
+          <button class='btn btn-primary me-3' type='submit' @click='createPlayer'>Create</button>
           <button class='btn btn-danger' type='reset'>Reset</button>
         </div>
       </form>
-    </div>
-    <button
-      class="btn btn-primary"
-      data-bs-target="#collapseTarget"
-      data-bs-toggle="collapse">
-      Bootstrap collapse
-    </button>
-    <div class="collapse py-2" id="collapseTarget">
-      This is the toggle-able content!
     </div>
   </div>
 </template>
@@ -111,6 +102,7 @@
 <script>
 export default {
   name: 'PlayerCreateForm',
+  emits: ['createPlayer'],
   data () {
     return {
       playerName: '',
@@ -138,7 +130,7 @@ export default {
     },
     async createPlayer () {
       if (this.validate()) {
-        // const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
 
@@ -159,7 +151,7 @@ export default {
           body: player,
           redirect: 'follow'
         }
-        fetch('http://localhost:8080/api/v1/players', requestOptions)
+        fetch(endpoint, requestOptions)
           .then(response => response.text())
           .then(result => console.log(result))
           .catch(error => console.log('error', error))

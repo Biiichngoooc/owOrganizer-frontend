@@ -25,7 +25,8 @@
           <td>{{player.lastName}}</td>
           <td>{{player.gender}}</td>
           <td>{{player.birthday}}</td>
-          <td><button type="button" class="btn-close" aria-label="Close" @click="deletePlayer"></button>
+          <td>
+            <button type="button" class="btn-close" aria-label="Close" @click='deletePlayer(player.id)'></button>
           </td>
         </tr>
         </tbody>
@@ -40,6 +41,7 @@ import PlayerCreateForm from '../components/PlayerCreateForm'
 
 export default {
   name: 'Players',
+  emits: ['addPlayer'],
   components: { PlayerCreateForm },
   data () {
     return {
@@ -47,8 +49,8 @@ export default {
     }
   },
   methods: {
-    addPlayer (playerLocation) {
-      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + playerLocation
+    addPlayer () {
+      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL
       const requestOption = {
         method: 'GET',
         redirect: 'follow'
@@ -57,6 +59,19 @@ export default {
         .then(response => response.json())
         .then(player => this.players.push(player))
         .catch(error => console.log('error', error))
+    },
+    deletePlayer (id) {
+      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players/' + id
+      const requestOptions = {
+        method: 'DELETE',
+        redirect: 'follow'
+      }
+
+      fetch(endpoint, requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error))
+      window.location.reload()
     }
   },
   mounted () {

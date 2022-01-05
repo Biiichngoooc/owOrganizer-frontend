@@ -1,17 +1,31 @@
 <template>
-  <h1>Welcome to Uniliga Teams</h1>
   <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-      <div class="col" v-for="uniligaTeam in uniligaTeams" :key="uniligaTeam.id">
-        <div class="card">
-          <img :src="getAvatar(uniligaTeam)" class="card-img-top" :alt="uniligaTeam.name">
-          <div class="card-body">
-            <h5 class="card-title">{{ uniligaTeam.name }}</h5>
-            <p class="card-text">
-              Wir sind Team {{ uniligaTeam.name }} der {{ uniligaTeam.uni }}!</p>
-          </div>
-        </div>
-      </div>
+    <h1>HTW Berlin</h1>
+    <hr>
+    <div class="col-6" >
+      <table class="table" v-for="uniligaTeam in uniligaTeams" :key="uniligaTeam.id">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Player</th>
+          <th scope="col">Role</th>
+          <th scope="col">Peak</th>
+          <th scope="col">Uni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="player in players" :key="player.id">
+          <th scope="row">{{player.id}}</th>
+          <td>{{player.playerName}}</td>
+          <td>{{player.bnetId}}</td>
+          <td>{{ player.discordTag }}</td>
+          <td>{{player.firstName}}</td>
+          <td>{{player.lastName}}</td>
+          <td>{{player.gender}}</td>
+          <td>{{player.birthday}}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
@@ -51,5 +65,21 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: black;
+}
+#tu-div {
+  background: red;
+}
+#htw-div{
+  background: #42b983;
+}
+#hu-div{
+  background: darkblue;
+}
+#fu-div{
+  background: yellowgreen;
+}
 
 </style>

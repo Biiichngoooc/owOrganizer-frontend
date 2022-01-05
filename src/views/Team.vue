@@ -1,31 +1,51 @@
 <template>
+  <h1>Welcome to Uniliga Teams</h1>
   <div class="container-fluid">
-    <h1>HTW Berlin</h1>
-    <hr>
-    <div class="col-6" >
-      <table class="table" v-for="uniligaTeam in uniligaTeams" :key="uniligaTeam.id">
-        <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Player</th>
-          <th scope="col">Role</th>
-          <th scope="col">Peak</th>
-          <th scope="col">Uni</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="player in players" :key="player.id">
-          <th scope="row">{{player.id}}</th>
-          <td>{{player.playerName}}</td>
-          <td>{{player.bnetId}}</td>
-          <td>{{ player.discordTag }}</td>
-          <td>{{player.firstName}}</td>
-          <td>{{player.lastName}}</td>
-          <td>{{player.gender}}</td>
-          <td>{{player.birthday}}</td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="row">
+      <div class="col">
+        <a href="team/htw" class="">
+          <div class="card" style="width: 18rem;">
+            <img src="../assets/htw.jpg" class="card-img-top" alt="..." >
+            <div class="card-body">
+              <h5 class="card-title">HTW Berlin </h5>
+              <p class="card-text"> </p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col">
+        <a href="#" class="">
+          <div class="card" style="width: 18rem;">
+            <img src="../assets/tu.png" class="card-img-top" alt="..." >
+            <div class="card-body">
+              <h5 class="card-title">TU Berlin</h5>
+              <p class="card-text"></p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col">
+        <a href="#" class="">
+          <div class="card" style="width: 18rem;">
+            <img src="../assets/hu.png" class="card-img-top" alt="..." >
+            <div class="card-body">
+              <h5 class="card-title">HU Berlin</h5>
+              <p class="card-text">  </p>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col">
+        <a href="#" class="">
+          <div class="card" style="width: 18rem;">
+            <img src="../assets/fu.png" class="card-img-top" alt="..." >
+            <div class="card-body">
+              <h5 class="card-title">FU Berlin</h5>
+              <p class="card-text">  </p>
+            </div>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -41,7 +61,7 @@ export default {
   methods: {
     getAvatar (uniligaTeam) {
       if (uniligaTeam.uni === 'Hochschule für Technik und Wirtschaft Berlin') {
-        return require('../assets/htw.png')
+        return require('../assets/htw.jpg')
       } else if (uniligaTeam.uni === 'Technische Universität Berlin') {
         return require('../assets/tu.png')
       }
@@ -68,18 +88,9 @@ export default {
 a {
   text-decoration: none;
   color: black;
+  border: none;
 }
-#tu-div {
-  background: red;
+a:hover {
+  text-decoration: none;
 }
-#htw-div{
-  background: #42b983;
-}
-#hu-div{
-  background: darkblue;
-}
-#fu-div{
-  background: yellowgreen;
-}
-
 </style>

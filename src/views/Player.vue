@@ -41,7 +41,7 @@ import PlayerCreateForm from '../components/PlayerCreateForm'
 
 export default {
   name: 'Players',
-  emits: ['addPlayer'],
+  emits: ['addPlayer', 'deletePlayer'],
   components: { PlayerCreateForm },
   data () {
     return {
@@ -68,7 +68,7 @@ export default {
       }
 
       fetch(endpoint, requestOptions)
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => console.log(result))
         .catch(error => console.log('error', error))
       window.location.reload()
@@ -93,7 +93,5 @@ export default {
 </script>
 
 <style scoped>
-.close {
-  color: red;
-}
+
 </style>

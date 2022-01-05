@@ -15,16 +15,28 @@
         <tbody>
         <tr v-for="player in players" :key="player.id">
           <th scope="row">{{ player.id }}</th>
-          <td>{{ player.playerName }}</td>
-          <td></td>
-          <td></td>
+          <td>{{player.playerName}}</td>
+          <td>
+            <div v-for="role in roles" :key="role.id">
+              <span v-if="role.playerId === player.id">{{role.role}}</span>
+            </div>
+          </td>
+          <td>
+            <div v-for="role in roles" :key="role.id">
+              <span v-if="role.playerId === player.id">{{role.peakSr}}</span>
+            </div>
+          </td>
+          <td>
+            <div v-for="player in players" :key="player.id">
+              <span>{{}}</span>
+            </div>
+          </td>
           <td>
             <button type="button" class="btn-close" aria-label="Close"></button>
           </td>
         </tr>
         </tbody>
       </table>
-      das geht :)
     </div>
   </div>
 </template>
@@ -49,7 +61,10 @@ export default {
     }
     fetch(endpointRoles, requestOptions)
       .then(response => response.json())
-      .then(result => console.log(result))
+      .then(result => result.forEach(role => {
+        this.roles.push(role)
+        console.log(role)
+      }))
       .catch(error => console.log('error', error))
     fetch(endpointPlayers, requestOptions)
       .then(response => response.json())
@@ -57,10 +72,6 @@ export default {
         this.players.push(player)
         console.log(player)
       }))
-      .catch(error => console.log('error', error))
-    fetch(endpointPlayers, requestOptions)
-      .then(response => response.json())
-      .then(result => console.log(result))
       .catch(error => console.log('error', error))
   }
 }

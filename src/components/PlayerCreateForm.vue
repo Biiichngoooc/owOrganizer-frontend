@@ -62,7 +62,7 @@
         </div>
         <div class='mb-3'>
           <label for='birthday' class='form-label'>Birthday</label>
-          <input type='text' class='form-control' id='birthday' v-model='birthday'>
+          <input type='date' class='form-control v3dp__datepicker' id='birthday' v-model='birthday' required>
           <div class='invalid-feedback'>
             Please provide the birthday.
           </div>
@@ -91,7 +91,7 @@
           </ul>
         </div>
         <div class='mt-5'>
-          <button class='btn btn-primary me-3' type='submit' @click='createPlayer'>Create</button>
+          <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer'>Create</button>
           <button class='btn btn-danger' type='reset'>Reset</button>
         </div>
       </form>
@@ -141,7 +141,7 @@ export default {
           gender: this.gender,
           firstName: this.firstName,
           lastName: this.lastName,
-          birthday: this.birthday.reviver,
+          birthday: this.birthday,
           student: this.isStudent,
           competitive: this.isCompetitive
         })
@@ -189,7 +189,6 @@ export default {
               event.stopPropagation()
               valid = false
             }
-
             form.classList.add('was-validated')
           }, false)
         })

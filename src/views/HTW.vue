@@ -16,7 +16,7 @@
         <tr v-for="player in players" :key="player.id">
           <th scope="row">{{ player.id }}</th>
           <td>{{ player.playerName }}</td>
-          <td>{{ (player.id > 0) ? 'positiv' : 'negativ' }}</td>
+          <td></td>
           <td></td>
           <td>
             <button type="button" class="btn-close" aria-label="Close"></button>

@@ -37,6 +37,8 @@
         </tr>
         </tbody>
       </table>
+      <button class="btn btn-primary">Add new Team</button>
+      <button class="btn btn-primary">Add Player to Team</button>
     </div>
   </div>
 </template>
@@ -47,7 +49,8 @@ export default {
   data () {
     return {
       players: [],
-      roles: []
+      roles: [],
+      uniligaTeams: []
     }
   },
   methods: {
@@ -55,6 +58,7 @@ export default {
   mounted () {
     const endpointRoles = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/roles'
     const endpointPlayers = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
+    const endpointTeams = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/uniligaTeams'
     const requestOptions = {
       method: 'GET',
       redirect: 'follow'
@@ -72,6 +76,10 @@ export default {
         this.players.push(player)
         console.log(player)
       }))
+      .catch(error => console.log('error', error))
+    fetch(endpointTeams, requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
       .catch(error => console.log('error', error))
   }
 }

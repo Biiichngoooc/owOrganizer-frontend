@@ -20,19 +20,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="player in players" :key="player.id">
-          <th scope="row">{{player.id}}</th>
-          <td>{{player.playerName}}</td>
-          <td>{{player.bnetId}}</td>
+        <tr v-for="player in allPlayers" :key="player.id">
+          <th scope="row">{{ player.id }}</th>
+          <td>{{ player.playerName }}</td>
+          <td>{{ player.bnetId }}</td>
           <td>{{ player.discordTag }}</td>
-          <td>{{player.firstName}}</td>
-          <td>{{player.lastName}}</td>
-          <td>{{player.gender}}</td>
-          <td>{{player.birthday}}</td>
-          <td>{{player.bnetMail}}</td>
-          <td>{{player.cityOfResidence}}</td>
-          <td>{{player.uni}}</td>
-          <td>{{player.uniMail}}</td>
+          <td>{{ player.firstName }}</td>
+          <td>{{ player.lastName }}</td>
+          <td>{{ player.gender }}</td>
+          <td>{{ player.birthday }}</td>
+          <td>{{ player.bnetMail }}</td>
+          <td>{{ player.cityOfResidence }}</td>
+          <td>{{ player.uni }}</td>
+          <td>{{ player.uniMail }}</td>
           <td>
             <button type="button" class="btn-close" aria-label="Close" @click='deletePlayer(player.id)'></button>
           </td>
@@ -57,14 +57,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="player in players" :key="player.id">
-          <th scope="row">{{player.id}}</th>
-          <td>{{player.playerName}}</td>
-          <td>{{player.bnetId}}</td>
+        <tr v-for="player in allPlayers" :key="player.id">
+          <th scope="row">{{ player.id }}</th>
+          <td>{{ player.playerName }}</td>
+          <td>{{ player.bnetId }}</td>
           <td>{{ player.discordTag }}</td>
-          <td>{{player.firstName}}</td>
-          <td>{{player.lastName}}</td>
-          <td>{{player.gender}}</td>
+          <td>{{ player.firstName }}</td>
+          <td>{{ player.lastName }}</td>
+          <td>{{ player.gender }}</td>
           <td>
             <button type="button" class="btn-close" aria-label="Close" @click='deletePlayer(player.id)'></button>
           </td>
@@ -78,13 +78,14 @@
 
 <script>
 import PlayerCreateForm from '../components/PlayerCreateForm'
-
 export default {
   name: 'Players',
   emits: ['addPlayer', 'deletePlayer'],
   components: { PlayerCreateForm },
   data () {
     return {
+      allPlayers: [],
+      studentPlayers: [],
       players: []
     }
   },
@@ -97,7 +98,7 @@ export default {
       }
       fetch(endpoint, requestOption)
         .then(response => response.json())
-        .then(player => this.players.push(player))
+        .then(player => this.allPlayers.push(player))
         .catch(error => console.log('error', error))
     },
     deletePlayer (id) {
@@ -124,7 +125,7 @@ export default {
     fetch(endpoint, requestOptions)
       .then(response => response.json())
       .then(result => result.forEach(player => {
-        this.players.push(player)
+        this.allPlayers.push(player)
         console.log(player)
       }))
       .catch(error => console.log('error', error))

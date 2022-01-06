@@ -27,8 +27,8 @@
             </div>
           </td>
           <td>
-            <div v-for="player in players" :key="player.id">
-              <span>{{}}</span>
+            <div>
+              <span>{{player.uni}}</span>
             </div>
           </td>
           <td>

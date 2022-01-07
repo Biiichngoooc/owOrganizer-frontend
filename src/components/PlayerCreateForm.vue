@@ -1,13 +1,14 @@
 <template>
   <button class='btn btn-primary sticky-button' data-bs-toggle='offcanvas' data-bs-target='#players-create-offcanvas'
-          aria-controls='#players-create-offcanvas'>
+          aria-controls='#players-create-offcanvas' @click="resetData">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16" style="--darkreader-inline-fill: currentColor;" data-darkreader-inline-fill="">
       <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
     </svg>
   </button>
   <div class='offcanvas offcanvas-end' tabindex='-1' id='players-create-offcanvas' aria-labelledby='offcanvas-label'>
     <div class='offcanvas-header'>
-      <h5 id='offcanvas-label'>New Player</h5>
+      <h5 v-if="playerId" id='offcanvas-label'>Edit Player</h5>
+      <h5 v-else id='offcanvas-label'>New Player</h5>
       <button type='button' id='close-offcanvas' class='btn-close text-reset' data-bs-dismiss='offcanvas'
               aria-label='Close'></button>
     </div>
@@ -62,25 +63,63 @@
         </div>
         <div class='mb-3'>
           <label for='birthday' class='form-label'>Birthday</label>
-          <input type='date' class='form-control v3dp__datepicker' id='birthday' v-model='birthday' required>
+          <input type='date' class='form-control v3dp__datepicker' id='birthday' v-model='birthday' inputFormat="dd.MM.yyyy" required>
           <div class='invalid-feedback'>
             Please provide the birthday.
           </div>
         </div>
         <div class='mb-3'>
           <div class='form-check'>
-            <input class='form-check-input' type='checkbox' id='isStudent' v-model='isStudent' >
-            <label class='form-check-label' for='isStudent'>
+            <input class='form-check-input' type='checkbox' id='student' v-model='student' >
+            <label class='form-check-label' for='student'>
               Student?
             </label>
           </div>
         </div>
         <div class='mb-3'>
           <div class='form-check'>
-            <input class='form-check-input' type='checkbox' id='isCompetitive' v-model='isCompetitive'>
-            <label class='form-check-label' for='isCompetitive'>
+            <input class='form-check-input' type='checkbox' id='competitive' v-model='competitive'>
+            <label class='form-check-label' for='competitive'>
               Competitive?
             </label>
+          </div>
+        </div>
+        <div v-if="student">
+          <div class='mb-3'>
+            <label for='bnet-mail' class='form-label'>Battle.Net Email</label>
+            <input type='email' class='form-control' id='bnet-mail' v-model='bnetMail' required>
+            <div class='invalid-feedback'>
+              Please provide a valid Battle.Net Email address.
+            </div>
+          </div>
+          <div class='mb-3'>
+            <label for='uni' class='form-label'>Uni</label>
+            <input type='text' class='form-control' id='uni' v-model='uni' required>
+            <div class='invalid-feedback'>
+              Please provide the university name.
+            </div>
+          </div>
+          <div class='mb-3'>
+            <label for='city-of-residence' class='form-label'>City of residence</label>
+            <input type='text' class='form-control' id='city-of-residence' v-model='cityOfResidence' required>
+            <div class='invalid-feedback'>
+              Please provide the city of residence.
+            </div>
+          </div>
+          <div class='mb-3'>
+            <label for='uni-mail' class='form-label'>University Email</label>
+            <input type='email' class='form-control' id='uni-mail' v-model='uniMail' required>
+            <div class='invalid-feedback'>
+              Please provide a valid university Email.
+            </div>
+          </div>
+          <div class='mb-3'>
+            <div class='form-check'>
+              <input class='form-check-input' type='checkbox' id='owned' v-model='owned' >
+              <label class='form-check-label' for='owned'>
+                Is owned?
+              </label>
+            </div>
           </div>
         </div>
         <div v-if='this.serverValidationMessages'>
@@ -91,8 +130,9 @@
           </ul>
         </div>
         <div class='mt-5'>
-          <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer'>Create</button>
-          <button class='btn btn-danger' type='reset'>Reset</button>
+          <button class='btn btn-primary me-3' type='submit' @click.prevent='updatePlayer' v-if="playerId">Edit</button>
+          <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer' v-else>Create</button>
+          <button class='btn btn-danger' type='reset' @click="reset">Reset</button>
         </div>
       </form>
     </div>
@@ -100,21 +140,50 @@
 </template>
 
 <script>
+const emptyData = {
+  playerName: '',
+  bnetId: '',
+  discordTag: '',
+  firstName: '',
+  lastName: '',
+  gender: '',
+  birthday: '',
+  student: false,
+  competitive: false,
+  serverValidationMessages: [],
+  // studentPlayer fields
+  bnetMail: '',
+  uni: '',
+  cityOfResidence: '',
+  owned: false,
+  uniMail: ''
+}
+
 export default {
   name: 'PlayerCreateForm',
-  emits: ['createPlayer'],
+  emits: ['playerCreated'],
+  props: ['playerId'],
   data () {
-    return {
-      playerName: '',
-      bnetId: '',
-      discordTag: '',
-      firstName: '',
-      lastName: '',
-      gender: '',
-      birthday: '',
-      isStudent: false,
-      isCompetitive: false,
-      serverValidationMessages: []
+    return { ...emptyData }
+  },
+  watch: {
+    playerId (id) {
+      if (id) {
+        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players/' + id
+        const requestOptions = {
+          method: 'GET',
+          redirect: 'follow'
+        }
+
+        fetch(endpoint, requestOptions)
+          .then(response => response.json())
+          .then(player => {
+            Object.assign(this.$data, { ...emptyData, ...player })
+          })
+          .catch(error => console.log('error', error))
+      } else {
+        this.resetData()
+      }
     }
   },
   methods: {
@@ -125,8 +194,8 @@ export default {
       console.log(this.lastName)
       console.log(this.gender)
       console.log(this.birthday)
-      console.log(this.isStudent)
-      console.log(this.isCompetitive)
+      console.log(this.student)
+      console.log(this.competitive)
     },
     async createPlayer () {
       if (this.validate()) {
@@ -134,34 +203,30 @@ export default {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
 
-        const player = JSON.stringify({
-          playerName: this.playerName,
-          bnetId: this.bnetId,
-          discordTag: this.discordTag,
-          gender: this.gender,
-          firstName: this.firstName,
-          lastName: this.lastName,
-          birthday: this.birthday,
-          student: this.isStudent,
-          competitive: this.isCompetitive
-        })
+        const player = {
+          ...this.$data, serverValidationMessages: undefined
+        }
         const requestOptions = {
           method: 'POST',
           headers: myHeaders,
-          body: player,
+          body: JSON.stringify(player),
           redirect: 'follow'
         }
         fetch(endpoint, requestOptions)
-          .then(response => response.text())
-          .then(result => console.log(result))
+          .then(response => this.handleResponse(response))
+          .then(result => {
+            this.resetData()
+
+            return result
+          })
           .catch(error => console.log('error', error))
-        // const response = await fetch(endpoint, requestOptions)
-        // await this.handleResponse(response)
       }
     },
+    async updatePlayer () {},
     async handleResponse (response) {
       if (response.ok) {
-        this.$emit('created', response.headers.get('location'))
+        const createdPlayer = await response.json()
+        this.$emit('playerCreated', createdPlayer)
         document.getElementById('close-offcanvas').click()
       } else if (response.status === 400) {
         response = await response.json()
@@ -173,26 +238,24 @@ export default {
       }
     },
     validate () {
-      // const form = document.getElementById('players-create-form')
-      // form.classList.add('was-validated')
-      // return form.checkValidity()
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
       let valid = true
-      const forms = document.querySelectorAll('.needs-validation')
-
-      // Loop over them and prevent submission
-      Array.prototype.slice.call(forms)
-        .forEach(function (form) {
-          form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-              valid = false
-            }
-            form.classList.add('was-validated')
-          }, false)
-        })
+      const form = document.querySelector('#players-create-form')
+      if (!form.checkValidity()) {
+        valid = false
+      }
+      form.classList.add('was-validated')
       return valid
+    },
+    reset (event) {
+      if (this.playerId) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    },
+    resetData () {
+      Object.assign(this.$data, { ...emptyData, playerId: undefined })
+      const form = document.querySelector('#players-create-form')
+      form.classList.remove('was-validated')
     }
   }
 }

@@ -1,8 +1,9 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo1.png">
+    <img alt="Overwatch logo" src="../assets/logo2.png">
     <HelloWorld msg="Uniliga Teams"/>
-  </div>
+
+</div>
 </template>
 
 <script>

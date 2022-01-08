@@ -130,7 +130,7 @@
           </ul>
         </div>
         <div class='mt-5'>
-          <button class='btn btn-danger me-3' type='reset' @click="reset">Reset</button>
+          <button class='btn btn-danger me-3' type='reset' @click="reset" v-if="!playerId">Reset</button>
           <button class='btn btn-primary me-3' type='submit' @click.prevent='updatePlayer' v-if="playerId">Edit</button>
           <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer' v-else>Create</button>
         </div>

@@ -63,7 +63,7 @@
         </div>
         <div class='mb-3'>
           <label for='birthday' class='form-label'>Birthday</label>
-          <input type='date' class='form-control v3dp__datepicker' id='birthday' v-model='birthday' inputFormat="dd.MM.yyyy" required>
+          <input type='date' class='form-control' id='birthday' v-model='birthday' required>
           <div class='invalid-feedback'>
             Please provide the birthday.
           </div>
@@ -122,7 +122,7 @@
             </div>
           </div>
         </div>
-        <div v-if='this.serverValidationMessages'>
+        <div v-if='serverValidationMessages'>
           <ul>
             <li v-for='(message, index) in serverValidationMessages' :key='index' style='color: red'>
               {{ message }}
@@ -130,9 +130,9 @@
           </ul>
         </div>
         <div class='mt-5'>
+          <button class='btn btn-danger me-3' type='reset' @click="reset">Reset</button>
           <button class='btn btn-primary me-3' type='submit' @click.prevent='updatePlayer' v-if="playerId">Edit</button>
           <button class='btn btn-primary me-3' type='submit' @click.prevent='createPlayer' v-else>Create</button>
-          <button class='btn btn-danger' type='reset' @click="reset">Reset</button>
         </div>
       </form>
     </div>
@@ -161,7 +161,7 @@ const emptyData = {
 
 export default {
   name: 'PlayerCreateForm',
-  emits: ['playerCreated'],
+  emits: ['playerCreated', 'playerUpdated', 'formCleared'],
   props: ['playerId'],
   data () {
     return { ...emptyData }
@@ -178,7 +178,8 @@ export default {
         fetch(endpoint, requestOptions)
           .then(response => response.json())
           .then(player => {
-            Object.assign(this.$data, { ...emptyData, ...player })
+            const [day, month, year] = player.birthday.split('.')
+            Object.assign(this.$data, { ...this.$data, ...player, birthday: `${year}-${month}-${day}` })
           })
           .catch(error => console.log('error', error))
       } else {
@@ -187,16 +188,6 @@ export default {
     }
   },
   methods: {
-    createPlayerConsole () {
-      console.log(this.bnetId)
-      console.log(this.discordTag)
-      console.log(this.firstName)
-      console.log(this.lastName)
-      console.log(this.gender)
-      console.log(this.birthday)
-      console.log(this.student)
-      console.log(this.competitive)
-    },
     async createPlayer () {
       if (this.validate()) {
         const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players'
@@ -204,7 +195,7 @@ export default {
         myHeaders.append('Content-Type', 'application/json')
 
         const player = {
-          ...this.$data, serverValidationMessages: undefined
+          ...this.$data, serverValidationMessages: emptyData.serverValidationMessages
         }
         const requestOptions = {
           method: 'POST',
@@ -213,7 +204,7 @@ export default {
           redirect: 'follow'
         }
         fetch(endpoint, requestOptions)
-          .then(response => this.handleResponse(response))
+          .then(response => this.handleResponse(response, true))
           .then(result => {
             this.resetData()
 
@@ -222,11 +213,37 @@ export default {
           .catch(error => console.log('error', error))
       }
     },
-    async updatePlayer () {},
-    async handleResponse (response) {
+    async updatePlayer () {
+      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/players/' + this.playerId
+      const myHeaders = new Headers()
+      myHeaders.append('Content-Type', 'application/json')
+
+      const player = {
+        ...this.$data, serverValidationMessages: emptyData.serverValidationMessages
+      }
+      const requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: JSON.stringify(player),
+        redirect: 'follow'
+      }
+      fetch(endpoint, requestOptions)
+        .then(response => this.handleResponse(response, false))
+        .then(result => {
+          this.resetData()
+
+          return result
+        })
+        .catch(error => console.log('error', error))
+    },
+    async handleResponse (response, created) {
       if (response.ok) {
-        const createdPlayer = await response.json()
-        this.$emit('playerCreated', createdPlayer)
+        const player = await response.json()
+        if (created) {
+          this.$emit('playerCreated', player)
+        } else {
+          this.$emit('playerUpdated', player)
+        }
         document.getElementById('close-offcanvas').click()
       } else if (response.status === 400) {
         response = await response.json()
@@ -253,9 +270,10 @@ export default {
       }
     },
     resetData () {
-      Object.assign(this.$data, { ...emptyData, playerId: undefined })
+      Object.assign(this.$data, { ...emptyData })
       const form = document.querySelector('#players-create-form')
       form.classList.remove('was-validated')
+      this.$emit('formCleared')
     }
   }
 }

@@ -47,8 +47,11 @@
         <div class="col-sm-4">
           <select id='selected-player' class='form-select' v-model='team.selectedPlayer' required>
             <option value='' selected disabled>Choose Player To Add...</option>
-            <option v-for="player in players" :value="player.id" :key="player.id">{{ player.playerName }} |
-              {{ player.uni }}
+            <option v-for="player in players" :value="player.id" :key="player.id">
+              <span v-if="player.student">
+                {{ player.playerName }} |
+                {{ player.uni }}
+              </span>
             </option>
           </select>
           <div class='invalid-feedback'>
@@ -70,85 +73,6 @@
 
 <script>
 import TeamCreateForm from '../components/TeamCreateForm'
-
-// const testRoles = [
-//   {
-//     roleId: 1,
-//     role: 'Offtank',
-//     heropool: 'Dva, Sigma',
-//     peakSr: 3150,
-//     playerId: 6
-//   },
-//   {
-//     roleId: 2,
-//     role: 'Main Support',
-//     heropool: 'Brig, Mercy, Ana, Bap',
-//     peakSr: 4250,
-//     playerId: 6
-//   },
-//   {
-//     roleId: 3,
-//     role: 'DPS',
-//     heropool: 'Sym',
-//     peakSr: 3000,
-//     playerId: 7
-//   }
-// ]
-// const testoTeams = [
-//   {
-//     id: 1,
-//     name: 'Team A',
-//     uni: 'Uni A',
-//     players: [
-//       {
-//         id: 1,
-//         playerName: 'Player A',
-//         uni: 'Player Uni A'
-//       },
-//       {
-//         id: 2,
-//         playerName: 'Player B',
-//         uni: 'Player Uni B'
-//       }
-//     ]
-//   },
-//   {
-//     id: 2,
-//     name: 'Team B',
-//     uni: 'Uni B',
-//     players: [
-//       {
-//         id: 3,
-//         playerName: 'Player C',
-//         uni: 'Player Uni C'
-//       },
-//       {
-//         id: 4,
-//         playerName: 'Player D',
-//         uni: 'Player Uni B'
-//       }
-//     ]
-//   }
-// ]
-
-// const testoPlayers = [
-//   {
-//     id: 5,
-//     playerName: 'Player E',
-//     uni: 'Player Uni A'
-//   },
-//   {
-//     id: 6,
-//     playerName: 'Player F',
-//     uni: 'Player Uni D'
-//   },
-//   {
-//     id: 7,
-//     playerName: 'Player G',
-//     uni: 'Player Uni B'
-//   }
-// ]
-
 export default {
   name: 'uniligaTeams',
   components: { TeamCreateForm },

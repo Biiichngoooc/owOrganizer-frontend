@@ -48,10 +48,8 @@
           <select id='selected-player' class='form-select' v-model='team.selectedPlayer' required>
             <option value='' selected disabled>Choose Player To Add...</option>
             <option v-for="player in players" :value="player.id" :key="player.id">
-              <span v-if="player.student">
                 {{ player.playerName }} |
                 {{ player.uni }}
-              </span>
             </option>
           </select>
           <div class='invalid-feedback'>
